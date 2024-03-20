@@ -1,13 +1,23 @@
 {
   "canisters": {
-    "message_board": {
-      "type": "custom",
-      "main": "src/index.ts",
-      "candid": "src/index.did",
-      "build": "npx azle message_board",
-      "ts": "src/index.ts",
-      "wasm": ".azle/message_board/message_board.wasm",
-      "gzip": true
-    }
+     "p2p_sharing": {
+        "type": "custom",
+        "main": "src/index.ts",
+        "candid": "src/index.did",
+        "candid_gen": "http",
+        "build": "npx azle p2p_sharing",
+        "wasm": ".azle/p2p_sharing/p2p_sharing.wasm",
+        "gzip": true,
+        "metadata": [
+           {
+              "name": "candid:service",
+              "path": "src/index.did"
+           },
+           {
+              "name": "cdk:name",
+              "content": "azle"
+           }
+        ]
+     }
   }
 }
