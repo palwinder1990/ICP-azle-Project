@@ -1,4 +1,3 @@
-// cannister code goes here
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Server, StableBTreeMap, ic } from 'azle';
@@ -17,6 +16,24 @@ const rentalsStorage = StableBTreeMap<string, Rental>(0);
 export default Server(() => {
     const app = express();
     app.use(express.json());
+
+    // Middleware for input validation
+    app.use((req, res, next) => {
+        const { tenant, propertyId, startDate, endDate } = req.body;
+        if (!tenant || !propertyId || !startDate || !endDate) {
+            return res.status(400).send('Missing required fields.');
+        }
+        if (new Date(startDate) >= new Date(endDate)) {
+            return res.status(400).send('Invalid date range: startDate must be before endDate.');
+        }
+        next();
+    });
+
+    // Error handling middleware
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).send('Something went wrong!');
+    });
 
     app.post("/rentals", (req, res) => {
         const { tenant, propertyId, startDate, endDate } = req.body;
